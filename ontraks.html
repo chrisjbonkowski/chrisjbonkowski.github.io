@@ -1,0 +1,138 @@
+<!Doctype html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset = "UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Farsight | OnTraks</title>
+        <link rel = "stylesheet" href="styles.css"></link>
+        <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+
+    </head>
+
+<html>
+
+    <body>
+
+        <h1 onclick="new DivObject('vanilla','wrapper')"><img class="logo" src="logo.png" height: 58px>Farsight</h1>
+        <div class= glow></div>
+        <div class="menuToggler"></div>
+        <div class="sideMenu">
+            <div class="listSpace">
+                <header></header>
+                <div class="menuTab" id = "ontraks" >OnTrak Select</div>
+                <div class="menuTab" id = "dashboards" >Dashboards</div>
+                <div class="menuTab" id = "organization" >Organization</div>
+                <div class="menuTab" id = "historian" >Historian</div>
+                <div class="menuTab" id = "settings" >Settings</div>
+            </div>
+        </div>
+
+        <script>
+
+            const toggler = document.querySelector(".menuToggler");
+            const sideMenu = document.querySelector(".sideMenu")
+
+            toggler.addEventListener("mouseover", ()=>{
+                sideMenu.classList.toggle("active");
+                toggler.classList.toggle("active");
+            });
+                
+        </script>
+
+        <div class="container" id="vanilla">
+            <div class="wrapper">
+                <header>OnTrak</header>
+                <div class="content">
+                    <div class="icon"><i class="bx bx-calculator"></i></div>
+                    <div class="title">OnTrak Card</div>
+                    <p>One Card Per OnTrak</p>
+                </div>
+            </div>
+
+            <!--<div class="wrapper" id="dragdiv" >
+                <header>Dragable Div</header>
+                <div class="content">
+                    <div class="icon"><i class="bx bx-move"></i></div>
+                    <div class="title">Channel Widget</div>
+                    <p>This is where the inner widgets will go</p>
+                </div>
+            </div>-->
+
+        </div>
+
+        <script>
+
+            wrappers = document.querySelectorAll(".wrapper");
+            menuTabs = document.querySelectorAll(".menuTab");
+        
+            function onDrag(){
+                let getStyle = window.getComputedStyle(event.target.offsetParent);
+                let transform = getStyle.getPropertyValue("transform");
+                var matrixPattern = /^\w*\((((\d+)|(\d*\.\d+)),\s*)*((\d+)|(\d*\.\d+))\)/i;
+                var matrixValue = [];
+                var matrixCopy = transform.replace(/^\w*\(/, '').replace(')', '');
+                matrixValue = matrixCopy.split(/\s*,\s*/);
+                event.target.offsetParent.style.transform = `translate(${parseInt(matrixValue[4])+event.movementX}px,${parseInt(matrixValue[5])+event.movementY}px)`;
+            }
+
+            DivObject = function(pickId, pickClass) {
+                this.div = document.createElement( "div");
+                document.getElementById(pickId).appendChild( this.div );
+                this.div.className = pickClass;
+                this.div.id= Math.round(Math.random()*10000000);
+                this.div.addEventListener("mousedown", ()=>{
+                    this.div.classList.add("active");
+                    this.div.classList.remove("grid");
+                    let getStyle = window.getComputedStyle(this.div);
+                    let top = getStyle.getPropertyValue("top");
+                    let left = getStyle.getPropertyValue("left");
+                    console.log(top+" "+left);
+                    this.div.addEventListener("mousemove", onDrag);
+                    });
+                this.div.addEventListener("mouseup", ()=>{
+                    event.target.classList.remove("active");
+                    event.target.classList.add("grid");
+                    event.target.removeEventListener("mousemove", onDrag);
+                    });
+                this.div.innerHTML +='<header>OnTrak</header><div class="content"><div class="icon"><i class="bx bx-calculator"></i></div><div class="title">OnTrak Card</div><p>One Card Per OnTrak</p></div>';
+            }
+
+            wrappers.forEach(wrapper => {
+                wrapper.addEventListener("mousedown", ()=>{
+                    wrapper.classList.add("active");
+                    wrapper.classList.remove("grid");
+                    wrapper.addEventListener("mousemove", onDrag);
+            })});
+
+            document.addEventListener("mouseup", ()=>{
+                actives = document.querySelectorAll(".wrapper.active")
+                actives.forEach(active => {
+                    active.classList.remove("active");
+                    active.classList.add("grid");
+                    active.removeEventListener("mousemove", onDrag);
+            })});
+
+            menuTabs.forEach(menuTab => {
+                menuTab.addEventListener("mouseover", ()=>{
+                    menuTab.classList.toggle("active");
+                });
+                menuTab.addEventListener("mouseout", ()=>{
+                    menuTab.classList.toggle("active");
+                });
+                menuTab.addEventListener("click", ()=>{
+                    location.href = `${event.target.id}.html`;
+                });
+                menuTab.addEventListener("mousedown", ()=>{
+                    menuTab.classList.toggle("clicked");
+                });
+            });
+
+
+
+        </script>
+    </body>
+
+</html>
